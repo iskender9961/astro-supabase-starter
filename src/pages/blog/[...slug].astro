@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from "astro:content";
+import NewLayout from "../../components/NewLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = new Date(post.data.date).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<NewLayout title={`${post.data.title} — Journals`} description={post.data.description}>
+  <article class="relative pt-32 pb-24 sm:pt-40 sm:pb-32">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <!-- Back link -->
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400 no-underline hover:no-underline transition-colors mb-10"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Back to Let's Talk Space
+      </a>
+
+      <!-- Header -->
+      <header class="mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <time class="text-xs text-gray-500 uppercase tracking-wider">{formattedDate}</time>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="flex gap-2">
+              {post.data.tags.map((tag: string) => (
+                <span class="text-xs text-cyan-400/60 border border-cyan-400/20 rounded-full px-2.5 py-0.5">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
+          {post.data.title}
+        </h1>
+        {post.data.author && (
+          <p class="text-gray-400 text-sm">By {post.data.author}</p>
+        )}
+      </header>
+
+      <!-- Content -->
+      <div class="prose prose-lg prose-invert prose-headings:text-white prose-p:text-gray-300 prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:text-cyan-300 prose-strong:text-white prose-li:text-gray-300 max-w-none">
+        <Content />
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-16 pt-8 border-t border-gray-800">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 no-underline hover:no-underline transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          More articles
+        </a>
+      </footer>
+    </div>
+  </article>
+</NewLayout>

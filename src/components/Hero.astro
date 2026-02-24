@@ -1,0 +1,53 @@
+---
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Glow orbs -->
+  <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-cyan-500/15 rounded-full blur-[120px] animate-glow-pulse"></div>
+  <div class="absolute bottom-1/3 right-1/5 w-72 h-72 bg-violet-500/10 rounded-full blur-[120px] animate-glow-pulse" style="animation-delay: 2s;"></div>
+  <div class="absolute top-1/2 left-2/3 w-56 h-56 bg-blue-500/10 rounded-full blur-[100px] animate-glow-pulse" style="animation-delay: 4s;"></div>
+
+  <!-- Orbital ring decoration -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] border border-gray-800/30 rounded-full opacity-30"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[550px] md:h-[550px] border border-gray-700/20 rounded-full opacity-20 rotate-45"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-24">
+    <p class="text-cyan-400 text-xs sm:text-sm uppercase tracking-[0.3em] mb-6 font-medium">
+      Space Technology &middot; Software &middot; Services
+    </p>
+
+    <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] mb-8">
+      The Next Chapter in
+      <span class="block bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+        Space Operations
+      </span>
+    </h1>
+
+    <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+      We build the software and systems that make space sustainable, accessible, and commercially viable. Small company today, big missions tomorrow.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href="/services"
+        class="inline-block border-2 border-cyan-400 text-cyan-400 rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-widest no-underline hover:no-underline hover:bg-cyan-400 hover:text-gray-950 transition-all duration-300"
+      >
+        Our Services
+      </a>
+      <a
+        href="/blog"
+        class="inline-block border-2 border-white/25 text-white rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-widest no-underline hover:no-underline hover:bg-white hover:text-gray-950 transition-all duration-300"
+      >
+        Let's Talk Space
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>

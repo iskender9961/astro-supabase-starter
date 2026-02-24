@@ -1,71 +1,263 @@
 ---
-import { getEntry } from "astro:content";
+import { getEntry, getCollection } from "astro:content";
 import Alert from "../components/Alert.astro";
 import Guide from "../components/Guide.astro";
 import Layout from "../components/Layout.astro";
 import TableRow from "../components/TableRow.astro";
 import { supabase } from "../utils/database";
 
+// New site imports
+import NewLayout from "../components/NewLayout.astro";
+import Hero from "../components/Hero.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import BlogCard from "../components/BlogCard.astro";
+
 export const prerender = false;
 
+// ── SITE MODE SWITCH ──────────────────────────────────────
+// Set SITE_MODE="new" (default) to serve the new website
+// Set SITE_MODE="maintenance" to serve the original starter page
+const siteMode = import.meta.env.SITE_MODE || "new";
+
+// ── MAINTENANCE MODE DATA ─────────────────────────────────
 let frameworks;
 let frameworksError;
+let connectGuide;
+let fetchDataGuide;
 
-// Fetch frameworks data from Supabase if connection is set up
-if (supabase) {
-  const { data, error } = await supabase
-    .from("frameworks")
-    .select("*")
-    .order("likes", { ascending: false });
-  frameworks = data;
-  frameworksError = error;
+if (siteMode === "maintenance") {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("frameworks")
+      .select("*")
+      .order("likes", { ascending: false });
+    frameworks = data;
+    frameworksError = error;
+  }
+  connectGuide = await getEntry("guides", "guide-connect-supabase");
+  fetchDataGuide = await getEntry("guides", "guide-fetch-data");
 }
 
-// Get guides
-const connectGuide = await getEntry("guides", "guide-connect-supabase");
-const fetchDataGuide = await getEntry("guides", "guide-fetch-data");
+// ── NEW SITE DATA ─────────────────────────────────────────
+let latestPosts: any[] = [];
+if (siteMode === "new") {
+  const allPosts = await getCollection("blog");
+  latestPosts = allPosts
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 3);
+}
+
+// Services data for new site
+const services = [
+  {
+    title: "Orbital Software Solutions",
+    description: "Custom mission planning, telemetry processing, and autonomous operations software for the new space economy.",
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>',
+  },
+  {
+    title: "Space Situational Awareness",
+    description: "Advanced tracking, monitoring, and predictive analytics for orbital assets and debris fields.",
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
+  },
+  {
+    title: "In-Orbit Servicing",
+    description: "Technologies for satellite life extension, inspection, proximity operations, and active debris removal.",
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17l-5.1-5.1m0 0L12 4.37m-5.68 5.7h11.8M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+  },
+  {
+    title: "Mission Integration",
+    description: "End-to-end mission design, spacecraft integration, launch coordination, and operational support.",
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>',
+  },
+];
 ---
 
-<Layout title="Web Frameworks">
-  {
-    supabase ? (
-      frameworks ? (
-        <>
-          <h1 class="mb-8 text-4xl font-bold">
-            Vote for Your Favorite Web Framework
-          </h1>
-          <table class="w-full text-left">
-            <thead>
-              <tr class="font-mono text-base border-t border-b">
-                <th>Name</th>
-                <th>Logo</th>
-                <th>Likes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {frameworks?.map((framework) => (
-                <TableRow framework={framework} />
-              ))}
-            </tbody>
-          </table>
-        </>
+{siteMode === "new" ? (
+  <NewLayout title="Journals — Space Technology & Software">
+    <!-- HERO -->
+    <Hero />
+
+    <!-- STATS BAR -->
+    <section class="relative py-16 border-y border-gray-800/50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <p class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">4+</p>
+            <p class="text-gray-400 text-sm mt-1">Core Services</p>
+          </div>
+          <div>
+            <p class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">24/7</p>
+            <p class="text-gray-400 text-sm mt-1">Mission Support</p>
+          </div>
+          <div>
+            <p class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">LEO–GEO</p>
+            <p class="text-gray-400 text-sm mt-1">Orbital Coverage</p>
+          </div>
+          <div>
+            <p class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">&infin;</p>
+            <p class="text-gray-400 text-sm mt-1">Ambition</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES PREVIEW -->
+    <section class="relative py-24 sm:py-32">
+      <div class="absolute top-1/2 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-[150px]"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <p class="text-cyan-400 text-xs uppercase tracking-[0.3em] mb-3 font-medium">What We Do</p>
+          <h2 class="text-3xl md:text-5xl font-bold">Our Services</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {services.map((service) => (
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              icon={service.icon}
+            />
+          ))}
+        </div>
+        <div class="text-center mt-12">
+          <a
+            href="/services"
+            class="inline-block border-2 border-white/20 text-white rounded-full px-8 py-3 text-sm font-medium uppercase tracking-widest no-underline hover:no-underline hover:bg-white hover:text-gray-950 transition-all duration-300"
+          >
+            View All Services
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT / MISSION -->
+    <section class="relative py-24 sm:py-32 border-y border-gray-800/50">
+      <div class="absolute top-0 left-0 w-80 h-80 bg-violet-500/5 rounded-full blur-[120px]"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p class="text-cyan-400 text-xs uppercase tracking-[0.3em] mb-3 font-medium">Our Mission</p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+              Small Company Today.<br />
+              <span class="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">Big Missions Tomorrow.</span>
+            </h2>
+            <p class="text-gray-400 leading-relaxed mb-6">
+              Journals is a space technology company providing software and services for the orbital economy. We work at the intersection of autonomous systems, mission operations, and in-orbit servicing.
+            </p>
+            <p class="text-gray-400 leading-relaxed">
+              Today, we're building the tools and expertise. Tomorrow, we're deploying them on missions that matter — making space safer, more sustainable, and commercially accessible.
+            </p>
+          </div>
+          <div class="relative">
+            <div class="aspect-square rounded-2xl border border-gray-800 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-violet-500/10"></div>
+              <div class="relative text-center p-8">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full border-2 border-cyan-400/30 flex items-center justify-center">
+                  <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 003 12c0-1.605.42-3.113 1.157-4.418" />
+                  </svg>
+                </div>
+                <p class="text-xl font-semibold text-white mb-2">Engineering Orbital Futures</p>
+                <p class="text-gray-400 text-sm">From LEO to GEO and beyond</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LATEST BLOG POSTS -->
+    {latestPosts.length > 0 && (
+      <section class="relative py-24 sm:py-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <p class="text-cyan-400 text-xs uppercase tracking-[0.3em] mb-3 font-medium">From the Blog</p>
+            <h2 class="text-3xl md:text-5xl font-bold">Let's Talk Space</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {latestPosts.map((post) => (
+              <BlogCard
+                title={post.data.title}
+                description={post.data.description}
+                date={post.data.date}
+                slug={post.id}
+                tags={post.data.tags}
+              />
+            ))}
+          </div>
+          <div class="text-center mt-12">
+            <a
+              href="/blog"
+              class="inline-block border-2 border-white/20 text-white rounded-full px-8 py-3 text-sm font-medium uppercase tracking-widest no-underline hover:no-underline hover:bg-white hover:text-gray-950 transition-all duration-300"
+            >
+              All Articles
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA -->
+    <section class="relative py-24 sm:py-32 border-t border-gray-800/50">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.03] to-transparent"></div>
+      <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-5xl font-bold mb-6">
+          Ready to Build Something
+          <span class="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">Extraordinary?</span>
+        </h2>
+        <p class="text-gray-400 text-lg mb-10 leading-relaxed">
+          Whether you need orbital software, mission support, or a technology partner who understands space — we're here.
+        </p>
+        <a
+          href="/contact"
+          class="inline-block border-2 border-cyan-400 text-cyan-400 rounded-full px-10 py-4 text-sm font-medium uppercase tracking-widest no-underline hover:no-underline hover:bg-cyan-400 hover:text-gray-950 transition-all duration-300"
+        >
+          Get in Touch
+        </a>
+      </div>
+    </section>
+  </NewLayout>
+) : (
+  <Layout title="Web Frameworks">
+    {
+      supabase ? (
+        frameworks ? (
+          <>
+            <h1 class="mb-8 text-4xl font-bold">
+              Vote for Your Favorite Web Framework
+            </h1>
+            <table class="w-full text-left">
+              <thead>
+                <tr class="font-mono text-base border-t border-b">
+                  <th>Name</th>
+                  <th>Logo</th>
+                  <th>Likes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {frameworks?.map((framework) => (
+                  <TableRow framework={framework} />
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <>
+            {frameworksError && (
+              <Alert
+                title={frameworksError.code}
+                text={frameworksError.message}
+                variant="error"
+              />
+            )}
+            {fetchDataGuide && <Guide guide={fetchDataGuide} />}
+          </>
+        )
       ) : (
         <>
-          {frameworksError && (
-            <Alert
-              title={frameworksError.code}
-              text={frameworksError.message}
-              variant="error"
-            />
-          )}
-          {fetchDataGuide && <Guide guide={fetchDataGuide} />}
+          <Alert title="Finish setting up your new site" text="Before your website is ready, you must complete the steps from the guide below to create, populate, and connect your Supabase database."/>
+          {connectGuide && <Guide guide={connectGuide} />}
         </>
       )
-    ) : (
-      <>
-        <Alert title="Finish setting up your new site" text="Before your website is ready, you must complete the steps from the guide below to create, populate, and connect your Supabase database."/>
-        {connectGuide && <Guide guide={connectGuide} />}
-      </>
-    )
-  }
-</Layout>
+    }
+  </Layout>
+)}

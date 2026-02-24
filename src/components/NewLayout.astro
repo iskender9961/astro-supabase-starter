@@ -1,0 +1,30 @@
+---
+import "../styles/globals.css";
+import NewHeader from "./NewHeader.astro";
+import NewFooter from "./NewFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Software and services for the space industry. Building today, launching tomorrow." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-gray-950 text-white antialiased overflow-x-hidden">
+    <div class="stars-bg fixed inset-0 pointer-events-none opacity-40"></div>
+    <NewHeader />
+    <main>
+      <slot />
+    </main>
+    <NewFooter />
+  </body>
+</html>

@@ -1,0 +1,117 @@
+---
+import NewLayout from "../components/NewLayout.astro";
+---
+
+<NewLayout title="Contact — Journals" description="Get in touch with Journals. Let's discuss your space technology needs.">
+  <section class="relative pt-32 pb-24 sm:pt-40 sm:pb-32">
+    <div class="absolute top-1/4 left-1/3 w-72 h-72 bg-cyan-500/8 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-56 h-56 bg-violet-500/8 rounded-full blur-[100px]"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <!-- Left: Info -->
+        <div>
+          <p class="text-cyan-400 text-xs uppercase tracking-[0.3em] mb-4 font-medium">Contact</p>
+          <h1 class="text-4xl sm:text-5xl font-bold mb-6">
+            Let's Start a
+            <span class="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">Conversation</span>
+          </h1>
+          <p class="text-gray-400 text-lg leading-relaxed mb-10">
+            Whether you have a mission concept, need technical expertise, or want to explore a partnership — we'd love to hear from you.
+          </p>
+
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg border border-gray-800 bg-gray-900/50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-white">Email</p>
+                <a href="mailto:hello@journals.space" class="text-sm text-gray-400 hover:text-cyan-400 no-underline hover:no-underline transition-colors">
+                  hello@journals.space
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg border border-gray-800 bg-gray-900/50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-white">Location</p>
+                <p class="text-sm text-gray-400">Earth orbit & beyond</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="border border-gray-800 rounded-lg p-8 bg-gray-900/30 backdrop-blur-sm">
+          <form name="contact" method="POST" data-netlify="true" class="space-y-6">
+            <input type="hidden" name="form-name" value="contact" />
+
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
+                placeholder="Your name"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
+                placeholder="you@company.com"
+              />
+            </div>
+
+            <div>
+              <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">Subject</label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                required
+                class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors"
+                placeholder="Mission inquiry, partnership, etc."
+              />
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors resize-none"
+                placeholder="Tell us about your project or inquiry..."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full border-2 border-cyan-400 text-cyan-400 rounded-full px-8 py-3.5 text-sm font-medium uppercase tracking-widest hover:bg-cyan-400 hover:text-gray-950 transition-all duration-300 cursor-pointer"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</NewLayout>
