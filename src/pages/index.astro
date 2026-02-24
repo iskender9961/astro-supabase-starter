@@ -24,48 +24,167 @@ if (supabase) {
 // Get guides
 const connectGuide = await getEntry("guides", "guide-connect-supabase");
 const fetchDataGuide = await getEntry("guides", "guide-fetch-data");
+
+const capabilities = [
+  {
+    title: "Rendezvous & Proximity Operations",
+    body: "Mission software for close-approach navigation, guidance constraints, and deterministic safety envelopes.",
+  },
+  {
+    title: "Debris Mitigation Planning",
+    body: "Collision-risk analytics and disposal planning to keep high-value orbits clear and sustainable.",
+  },
+  {
+    title: "Autonomy Toolchains",
+    body: "Operational pipelines that move from simulation to flight operations with traceable decision logic.",
+  },
+  {
+    title: "Mission Data Products",
+    body: "Telemetry processing, anomaly triage, and operator-facing mission dashboards with clear state visibility.",
+  },
+];
+
+const missionSignals = [
+  { label: "Orbit classes", value: "LEO to GEO" },
+  { label: "Ops coverage", value: "24/7 readiness" },
+  { label: "Architecture", value: "Software-first" },
+];
 ---
 
-<Layout title="Web Frameworks">
-  {
-    supabase ? (
-      frameworks ? (
-        <>
-          <h1 class="mb-8 text-4xl font-bold">
-            Vote for Your Favorite Web Framework
+<Layout
+  title="Final Proximity | Orbital Operations Software"
+  description="Space-grade mission software and operations systems for clear, controlled orbits."
+>
+  <section class="pt-16 sm:pt-24">
+    <div class="surface-card p-8 sm:p-12 lg:p-14 relative overflow-hidden">
+      <div class="orbital-ring w-72 h-72 -right-24 -top-20 opacity-60"></div>
+      <div class="orbital-ring w-[28rem] h-[28rem] -left-40 -bottom-56 opacity-25"></div>
+
+      <div class="relative z-10 grid lg:grid-cols-[1fr_20rem] gap-12 items-start">
+        <div>
+          <p class="section-kicker mb-4">Orbital Software Platform</p>
+          <h1 class="section-title max-w-3xl">
+            Clear-space execution for
+            high-consequence orbital missions.
           </h1>
-          <table class="w-full text-left">
-            <thead>
-              <tr class="font-mono text-base border-t border-b">
-                <th>Name</th>
-                <th>Logo</th>
-                <th>Likes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {frameworks?.map((framework) => (
-                <TableRow framework={framework} />
-              ))}
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <>
-          {frameworksError && (
+          <p class="mt-6 text-slate-200 max-w-2xl text-base sm:text-lg leading-relaxed">
+            Final Proximity designs mission software and operational systems for
+            debris mitigation, proximity operations, and resilient autonomous
+            flight workflows.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#capabilities"
+              class="primary-btn bg-cyan-300 text-[#072234] hover:bg-cyan-200 no-underline"
+            >
+              Explore capabilities
+            </a>
+            <a
+              href="#operations"
+              class="primary-btn border border-white/20 text-slate-100 hover:border-cyan-200 hover:text-cyan-100 no-underline"
+            >
+              View operations board
+            </a>
+          </div>
+        </div>
+
+        <aside class="surface-card p-5 bg-white/[0.045]">
+          <p class="text-xs tracking-[0.28em] uppercase text-cyan-200 mb-4">
+            Mission Signals
+          </p>
+          <ul class="space-y-3">
+            {missionSignals.map((signal) => (
+              <li class="border-b border-white/10 pb-3 last:pb-0 last:border-b-0">
+                <p class="text-[0.72rem] uppercase tracking-[0.2em] text-slate-300">{signal.label}</p>
+                <p class="text-lg font-semibold text-white mt-1">{signal.value}</p>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="mission" class="pt-20">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <div>
+        <p class="section-kicker mb-3">Mission</p>
+        <h2 class="section-title">
+          Build trustworthy autonomy for safer orbital infrastructure.
+        </h2>
+      </div>
+      <p class="text-slate-200 leading-relaxed text-base sm:text-lg">
+        Our work focuses on clear state awareness, deterministic control
+        behaviors, and decision-support tooling operators can trust under
+        mission pressure. The goal is practical: fewer surprises, faster
+        interventions, and cleaner orbits.
+      </p>
+    </div>
+  </section>
+
+  <section id="capabilities" class="pt-18 sm:pt-20">
+    <p class="section-kicker mb-3">Capabilities</p>
+    <h2 class="section-title mb-8">Software and systems for the full operations loop.</h2>
+    <div class="grid sm:grid-cols-2 gap-5">
+      {capabilities.map((capability) => (
+        <article class="surface-card p-6">
+          <h3 class="text-xl font-semibold mb-3">{capability.title}</h3>
+          <p class="text-slate-200 leading-relaxed text-sm sm:text-base">{capability.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="operations" class="pt-20">
+    <div class="surface-card p-6 sm:p-8">
+      <p class="section-kicker mb-3">Operations Board</p>
+      <h2 class="section-title text-2xl sm:text-4xl mb-6">
+        Live technology stack tracking
+      </h2>
+
+      {
+        supabase ? (
+          frameworks ? (
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[42rem] text-left">
+                <thead>
+                  <tr class="border-b border-white/15 text-xs uppercase tracking-[0.2em] text-slate-300">
+                    <th class="pb-4 pr-4">Platform</th>
+                    <th class="pb-4 pr-4">Visual</th>
+                    <th class="pb-4 pr-4">Votes</th>
+                    <th class="pb-4">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {frameworks?.map((framework) => (
+                    <TableRow framework={framework} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <>
+              {frameworksError && (
+                <Alert
+                  title={frameworksError.code}
+                  text={frameworksError.message}
+                  variant="error"
+                />
+              )}
+              {fetchDataGuide && <Guide guide={fetchDataGuide} />}
+            </>
+          )
+        ) : (
+          <>
             <Alert
-              title={frameworksError.code}
-              text={frameworksError.message}
-              variant="error"
+              title="Database Connection Needed"
+              text="Connect Supabase to enable the live operations board below."
             />
-          )}
-          {fetchDataGuide && <Guide guide={fetchDataGuide} />}
-        </>
-      )
-    ) : (
-      <>
-        <Alert title="Finish setting up your new site" text="Before your website is ready, you must complete the steps from the guide below to create, populate, and connect your Supabase database."/>
-        {connectGuide && <Guide guide={connectGuide} />}
-      </>
-    )
-  }
+            {connectGuide && <Guide guide={connectGuide} />}
+          </>
+        )
+      }
+    </div>
+  </section>
 </Layout>

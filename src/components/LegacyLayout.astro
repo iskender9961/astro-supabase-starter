@@ -1,0 +1,27 @@
+---
+import "../../src/styles/globals.css";
+import LegacyFooter from "./LegacyFooter.astro";
+import LegacyHeader from "./LegacyHeader.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body class="legacy-shell px-4 antialiased sm:px-8 text-white">
+    <LegacyHeader />
+    <main class="w-full max-w-4xl mx-auto grow">
+      <slot />
+    </main>
+    <LegacyFooter />
+  </body>
+</html>

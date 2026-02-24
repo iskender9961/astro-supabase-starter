@@ -10,52 +10,91 @@ if (!id) {
   throw new Error("No framework id provided");
 }
 
-// Fetch pet data from Supabase if connection is set up
-let framework;
-if (supabase) {
+let framework = null;
+let loadError: string | null = null;
+
+if (!supabase) {
+  loadError = "Supabase is not configured for this deployment.";
+} else {
   const { data, error } = await supabase
     .from("frameworks")
     .select("*")
     .eq("id", id)
     .single();
-  framework = data ? data : null;
-  if (error || !framework) {
-    console.error(error);
-    throw new Error("No framework found");
+
+  if (error || !data) {
+    Astro.response.status = 404;
+    loadError = "No framework found for this identifier.";
+  } else {
+    framework = data;
   }
 }
 ---
 
-<Layout title={`${framework?.name} | Frameworks`}>
-  <article class="border-b pb-14 border-neutral-600">
-    <header
-      class="flex flex-wrap items-center justify-between pb-2 mb-8 border-b"
-    >
-      <h1 class="mb-4 text-5xl font-bold">{framework?.name}</h1>
-      <a href={framework?.url} class="underline">Website &#8599;</a>
-    </header>
+<Layout
+  title={framework ? `${framework.name} | Final Proximity` : "Framework | Final Proximity"}
+  description="Framework details and operations board telemetry."
+>
+  <section class="pt-16 sm:pt-20">
+    <a href="/#operations" class="text-sm text-cyan-200 no-underline hover:underline">
+      &larr; Back to operations board
+    </a>
+  </section>
 
-    <figure>
-      <img
-        src={`/.netlify/images?url=/images/${framework?.logo}`}
-        alt={framework?.name}
-        class="mb-2 border rounded-sm border-neutral-500"
-      />
-      <figcaption class="font-mono text-xs">{framework?.name} logo</figcaption>
-    </figure>
+  {framework ? (
+    <article class="surface-card mt-6 p-7 sm:p-10">
+      <header class="flex flex-wrap items-start justify-between gap-4 pb-6 border-b border-white/12">
+        <div>
+          <p class="section-kicker mb-2">Platform Profile</p>
+          <h1 class="text-4xl sm:text-5xl font-bold">{framework.name}</h1>
+        </div>
+        <a
+          href={framework.url}
+          target="_blank"
+          rel="noreferrer"
+          class="primary-btn border border-cyan-300/55 text-cyan-100 hover:bg-cyan-300 hover:text-[#082131] no-underline"
+        >
+          Open website
+        </a>
+      </header>
 
-    <p class="py-6 text-xl">{framework?.description}</p>
+      <div class="mt-8 grid md:grid-cols-[13rem_1fr] gap-8 items-start">
+        <figure>
+          <img
+            src={`/.netlify/images?url=/images/${framework.logo}`}
+            alt={framework.name}
+            class="w-full rounded-xl border border-white/10 bg-white/5 p-4"
+          />
+          <figcaption class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-300">visual identity</figcaption>
+        </figure>
 
-    <form action={`/api/frameworks/${framework?.id}/like`} method="post">
-      <h2 class="mb-2 text-2xl">Like {framework?.name}!</h2>
+        <div>
+          <p class="text-slate-100 text-lg leading-relaxed">{framework.description}</p>
+          <div class="mt-7 p-5 rounded-xl border border-white/12 bg-white/[0.03]">
+            <p class="text-xs uppercase tracking-[0.22em] text-cyan-200 mb-2">Current votes</p>
+            <p class="text-3xl font-bold text-white">
+              {framework.likes}
+              <span class="text-base font-medium text-slate-300 ml-1">
+                like{framework.likes === 1 ? "" : "s"}
+              </span>
+            </p>
+          </div>
 
-      <p class="mb-4">
-        {framework?.name} has {framework?.likes} like{
-          framework?.likes === 1 ? "" : "s"
-        }.
-      </p>
-
-      <button type="submit" class="px-4 py-2 bg-green-500 rounded-sm text-neutral-800 hover:bg-green-600">Give {framework?.name} your vote &starf;</button>
-    </form>
-  </article>
+          <form action={`/api/frameworks/${framework.id}/like`} method="post" class="mt-7">
+            <button
+              type="submit"
+              class="primary-btn bg-cyan-300 text-[#082131] hover:bg-cyan-200"
+            >
+              Register vote
+            </button>
+          </form>
+        </div>
+      </div>
+    </article>
+  ) : (
+    <div class="surface-card mt-6 p-7 sm:p-9">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-3">Platform unavailable</h1>
+      <p class="text-slate-200">{loadError}</p>
+    </div>
+  )}
 </Layout>

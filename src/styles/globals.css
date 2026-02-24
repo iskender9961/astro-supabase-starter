@@ -1,17 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap');
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+:root {
+  --ink-950: #071019;
+  --ink-900: #0b1624;
+  --ink-800: #122235;
+  --slate-300: #a8b7c8;
+  --slate-200: #c7d3df;
+  --slate-100: #dde7f0;
+  --white-strong: #f8fbff;
+  --cyan: #30c6ec;
+  --blue: #2560e6;
+  --teal: #1f9688;
+}
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: "Manrope", "Segoe UI", sans-serif;
+    color: var(--white-strong);
+    background:
+      radial-gradient(circle at 18% 14%, rgba(37, 96, 230, 0.2), transparent 28%),
+      radial-gradient(circle at 80% 4%, rgba(48, 198, 236, 0.16), transparent 32%),
+      radial-gradient(circle at 72% 78%, rgba(31, 150, 136, 0.17), transparent 40%),
+      linear-gradient(150deg, var(--ink-950), var(--ink-900) 48%, #0a1827);
+    min-height: 100vh;
+    letter-spacing: 0.005em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    letter-spacing: -0.015em;
+  }
+
   a {
-    @apply hover:underline hover:underline-offset-2 hover:decoration-green-500;
+    color: inherit;
   }
-  td {
-    @apply pt-4 pb-6;
+
+  table {
+    border-collapse: collapse;
   }
-  th {
-    @apply py-4;
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-2xl border border-white/12 bg-white/[0.03] shadow-[0_22px_60px_rgba(4,10,18,0.35)] backdrop-blur-sm;
   }
-  img {
-    @apply border rounded-sm border-neutral-500;
+
+  .section-kicker {
+    @apply text-[0.72rem] uppercase tracking-[0.32em] font-semibold text-cyan-300;
   }
+
+  .section-title {
+    @apply text-3xl md:text-5xl font-bold leading-tight;
+  }
+
+  .ghost-grid {
+    background-image:
+      linear-gradient(rgba(174, 201, 235, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(174, 201, 235, 0.08) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(circle at center, black 58%, transparent 100%);
+  }
+
+  .orbital-ring {
+    position: absolute;
+    inset: auto;
+    border-radius: 9999px;
+    border: 1px solid rgba(116, 170, 255, 0.25);
+    pointer-events: none;
+  }
+
+  .primary-btn {
+    @apply inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold uppercase tracking-[0.16em] transition;
+  }
+}
+
+/* Legacy maintenance theme */
+.legacy-shell {
+  background: #262626 !important;
+  color: #ffffff;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+}
+
+.legacy-shell a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: #22c55e;
 }

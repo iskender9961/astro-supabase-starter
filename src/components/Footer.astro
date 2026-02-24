@@ -1,5 +1,25 @@
-<footer class="max-w-4xl mx-auto mt-12">
-  <a href="https://docs.netlify.com/frameworks/astro/" class="text-base underline">
-    Astro on Netlify
-  </a>
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="relative z-10 border-t border-white/10 mt-20">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <div class="max-w-lg">
+      <p class="section-kicker mb-2">Final Proximity</p>
+      <h3 class="text-xl font-bold mb-2">Orbital software for clear, controlled space operations.</h3>
+      <p class="text-sm text-slate-300">We design mission-grade software, autonomy pipelines, and operational tooling for safer orbits.</p>
+    </div>
+
+    <div class="text-sm text-slate-300">
+      <p class="font-semibold text-slate-100 mb-2">Quick Links</p>
+      <div class="flex flex-col gap-1">
+        <a class="no-underline hover:text-cyan-200" href="/#mission">Mission</a>
+        <a class="no-underline hover:text-cyan-200" href="/#capabilities">Capabilities</a>
+        <a class="no-underline hover:text-cyan-200" href="/#operations">Operations Board</a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 pb-8 text-xs text-slate-400">
+    &copy; {year} Final Proximity. All rights reserved.
+  </div>
 </footer>

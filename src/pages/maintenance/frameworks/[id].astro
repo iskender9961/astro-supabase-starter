@@ -1,0 +1,60 @@
+---
+import LegacyLayout from "../../../components/LegacyLayout.astro";
+import { supabase } from "../../../utils/database";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!id) {
+  throw new Error("No framework id provided");
+}
+
+let framework = null;
+if (supabase) {
+  const { data } = await supabase
+    .from("frameworks")
+    .select("*")
+    .eq("id", id)
+    .single();
+  framework = data ? data : null;
+}
+---
+
+<LegacyLayout title={`${framework?.name ?? "Framework"} | Maintenance`}>
+  {framework ? (
+    <article class="border-b pb-14 border-neutral-600">
+      <header class="flex flex-wrap items-center justify-between pb-2 mb-8 border-b border-neutral-600">
+        <h1 class="mb-4 text-5xl font-bold">{framework.name}</h1>
+        <a href={framework.url} class="underline" target="_blank" rel="noreferrer">Website &#8599;</a>
+      </header>
+
+      <figure>
+        <img
+          src={`/.netlify/images?url=/images/${framework.logo}`}
+          alt={framework.name}
+          class="mb-2 border rounded-sm border-neutral-500"
+        />
+        <figcaption class="font-mono text-xs">{framework.name} logo</figcaption>
+      </figure>
+
+      <p class="py-6 text-xl">{framework.description}</p>
+
+      <form action={`/api/frameworks/${framework.id}/like`} method="post">
+        <h2 class="mb-2 text-2xl">Like {framework.name}!</h2>
+        <p class="mb-4">
+          {framework.name} has {framework.likes} like{framework.likes === 1 ? "" : "s"}.
+        </p>
+        <button type="submit" class="px-4 py-2 bg-green-500 rounded-sm text-neutral-900 hover:bg-green-600">
+          Give {framework.name} your vote &starf;
+        </button>
+      </form>
+    </article>
+  ) : (
+    <article class="border border-neutral-600 rounded-sm p-8">
+      <h1 class="text-2xl font-bold mb-2">Framework not available</h1>
+      <p class="text-neutral-200 mb-4">No matching framework was found.</p>
+      <a href="/maintenance" class="underline">Back to maintenance page</a>
+    </article>
+  )}
+</LegacyLayout>
