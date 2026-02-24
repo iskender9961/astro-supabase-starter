@@ -1,21 +1,6 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
-@theme {
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
-}
-
 @layer base {
   a {
     @apply hover:underline hover:underline-offset-2 hover:decoration-green-500;
@@ -29,17 +14,4 @@
   img {
     @apply border rounded-sm border-neutral-500;
   }
-}
-
-.stars-bg {
-  background-image:
-    radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 50px 80px, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 100px 20px, rgba(255,255,255,0.7), transparent),
-    radial-gradient(1.5px 1.5px at 150px 60px, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 75px 110px, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1.5px 1.5px at 180px 130px, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 10px 90px, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 120px 150px, rgba(255,255,255,0.3), transparent);
-  background-size: 200px 200px;
 }
